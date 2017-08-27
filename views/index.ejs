@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/css/style.css' />
+    <link rel='stylesheet' href='/css/bootstrap.min.css' />
+    <script src="/js/jquery.min.js"></script> 
+    <script src="/js/bootstrap.min.js"></script> 
+    <script src="/js/knockout-latest.js"></script>
+    <script src="/js/app-knockout.js"></script>      
+  </head>
+  <body background="/images/bkgrnd.jpg">
+   <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Daily Doctors Tracker</a>
+        </div>
+        <div class="nav navbar-nav navbar-right">
+          <button id="import" class="btn navbar-btn btn-primary" data-toggle="modal" data-target="#myModal">
+            Import
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <div id="myModal" class="modal fade" role="dialog">
+      <div class="modal-dialog modal-sm">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+             <h4 class="modal-title">Enter month for which you are importing data</h4> 
+          </div>
+          <div class="modal-body">
+            <p>Enter Month:</p>
+            <input id="modalText" type="text" />
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="modalOk" class="btn btn-default" data-dismiss="modal">Ok</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<div class="container-fluid text-center">    
+  <div class="row content">
+    <div class="col-sm-1 sidenav">      
+    </div>
+    <div class="col-sm-10 text-left"> 
+      <div class="panel panel-default">
+        <div class="panel-heading" style="background-color: #222; color: white;">
+          Doctor's List
+          <button class="btn btn-primary" style="float: right; margin-top: -5px;" data-bind="click: SaveData">
+            Save
+          </button>
+        </div>
+        <div class="panel-body">
+          <br />
+          <div class="panel">
+          <div class="row">
+            <div class="col-sm-4">
+              <span>Select Class</span>
+              <select class="selectpicker" data-bind="options: Classes, value: SelectedClass"></select>
+            </div>
+            <div class="col-sm-8">
+              <div style="display: inline-block; margin-right: 15em;">
+                <span>Select Month</span>
+                <select class="selectpicker" data-bind="options: DistinctMonths, value: SelectedMonth" style="width: 125px;">
+                </select>
+              </div>
+              <div style="display: inline-block">
+                <span>Search Doctor</span>
+                <input type="text" data-bind="textInput: Query"/>
+              </div>
+            </div>
+          </div>
+          </div>
+          <table class="table table-striped table-hover">
+            <thead>
+              <th>Place</th>
+              <th>Dr. Name</th>
+              <th>Speciality</th>
+              <th>Class</th>
+              <th>First Visit</th>
+              <th>Second Visit</th>
+              <th>Expired</th>
+              <th>On-Call</th>
+              <th>Left Clinic</th>
+            </thead>
+            <tbody data-bind="foreach: FilteredDoctors">
+              <tr>
+                <td><input type="text" data-bind="value: place"></input></td>
+                <td><input type="text" data-bind="value: DRNAME"></input></td>
+                <td><input type="text" data-bind="value: SPL"></input></td>
+                <td data-bind="text: CLASS"></td>
+                <td><input type="checkbox" data-bind="checked: IsVisited"/></td>
+                <td><input type="checkbox" data-bind="checked: IsVisitedAgain, enable: CLASS() === 'A'"/></td>
+                <td><input type="checkbox" data-bind="checked: IsExpired"/></td>
+                <td><input type="checkbox" data-bind="checked: IsOnCall"/></td>
+                <td><input type="checkbox" data-bind="checked: IsLeftClinic"/></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <hr>
+    </div>
+
+    <div class="col-sm-1 sidenav">
+    </div>
+
+  </div>
+</div>
+<footer class="container-fluid text-center">
+</footer>
+    <script type="text/javascript">
+      $(function(){
+
+        // $('#modalOk').click(function(){
+        //   alert($('#modalText').val());
+        // });
+        $('#modalOk').click(function(){
+          $.ajax({
+            type: 'POST',
+            url: 'http://localhost:3000/import',
+            dataType: 'json',
+            data: {"month": $('#modalText').val()},
+            success: function(result){
+              window.location = '/';
+            }
+          });
+        });
+
+        $.ajax({
+          url: "http://localhost:3000/fetchDates",
+          type: "GET",
+          dataType: 'json',
+          success: function(data){
+            AppModule.Init();
+            AppModule.BindData(data);
+            ko.applyBindings(AppModule.Vm());
+          }
+        });
+
+        
+
+      });
+    </script>
+  </body>
+</html>
