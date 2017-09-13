@@ -88,7 +88,7 @@ var viewModels = viewModels || {};
 
         self.SaveData = function(){
             var jsonData = ko.toJSON(self.Doctors());
-            $.post('http://localhost:3000/saveData', {"data": jsonData}, function(returnedData){
+            $.post('https://archanadoctorsapp.herokuapp.com/saveData', {"data": jsonData}, function(returnedData){
                 console.log(returnedData);
                 window.location = '/';
             });
