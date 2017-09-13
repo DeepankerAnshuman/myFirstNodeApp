@@ -1,7 +1,7 @@
 var MongoClient = require('mongodb').MongoClient;
 
 exports.insertBulkData= function(isSave, data, callback){
-    MongoClient.connect("mongodb://localhost:27017/archanaapp", function(err, db) {
+    MongoClient.connect("mongodb://manshuan:restinpeace@ds135384.mlab.com:35384/archanaapp", function(err, db) {
     // Get the collection
     var collection= db.collection('doctors');
     try {
@@ -29,7 +29,7 @@ exports.insertBulkData= function(isSave, data, callback){
 
 exports.fetchDropdownData= function(callback){
     var data = [];
-    MongoClient.connect("mongodb://localhost:27017/archanaapp", function(err, db) {
+    MongoClient.connect("mongodb://manshuan:restinpeace@ds135384.mlab.com:35384/archanaapp", function(err, db) {
     //Get the collection
     var collection = db.collection('doctors');
     try {
