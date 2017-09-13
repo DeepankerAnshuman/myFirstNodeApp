@@ -122,7 +122,7 @@
         $('#modalOk').click(function(){
           $.ajax({
             type: 'POST',
-            url: 'http://localhost:3000/import',
+            url: 'https://archanadoctorsapp.herokuapp.com/import',
             dataType: 'json',
             data: {"month": $('#modalText').val()},
             success: function(result){
@@ -132,8 +132,8 @@
         });
 
         $.ajax({
-          url: "http://localhost:3000/fetchDates",
-          type: "GET",
+          type: 'GET',
+          url: 'https://archanadoctorsapp.herokuapp.com/fetchDates',
           dataType: 'json',
           success: function(data){
             AppModule.Init();
